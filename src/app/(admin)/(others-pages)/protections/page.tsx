@@ -1,23 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import {
-    Table,
-    TableHeader,
-    TableRow,
-    TableCell,
-    TableBody,
-} from "@/components/ui/table";
-import {
-    Search,
-    Pencil,
-    Trash2,
+    Search, 
     Plus,
     ChevronLeft,
     ChevronRight,
 } from "lucide-react";
 import Input from "@/components/form/input/InputField";
 import Button from "@/components/ui/button/Button";
+import BasicTableOne from "@/components/tables/BasicTableOne";
 
 interface Protection {
     id: number;
@@ -77,13 +69,13 @@ export default function ProtectionsPage() {
     return (
         <div className="p-6">
             {/* Header */}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-5">
+            <div className="flex gap-3 items-center flex-wrap justify-between mb-5">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
                     Protections
                 </h2>
 
-                <div className="flex items-center gap-3 w-full sm:w-auto">
-                    <div className="relative w-full sm:w-72">
+                <div className="flex items-center gap-3 w-full sm:w-auto flex-wrap">
+                    <div className="relative w-full sm:w-[600px] shrink">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input
                             type="text"
@@ -94,7 +86,7 @@ export default function ProtectionsPage() {
                         />
                     </div>
 
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 px-4">
+                    <Button className="bg-blue-600  hover:bg-blue-700 text-white gap-2 px-4">
                         <Plus size={16} />
                         Create Protection
                     </Button>
@@ -102,93 +94,16 @@ export default function ProtectionsPage() {
             </div>
 
             {/* Table */}
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
-                <Table>
-                    <TableHeader className="bg-gray-50 dark:bg-white/[0.04] border-b border-gray-200 dark:border-gray-800">
-                        <TableRow>
-                            <TableCell isHeader className="py-3 px-5 font-medium text-gray-600 text-sm">
-                                Manufacturer
-                            </TableCell>
-                            <TableCell isHeader className="py-3 px-5 font-medium text-gray-600 text-sm">
-                                Protection Type
-                            </TableCell>
-                            <TableCell isHeader className="py-3 px-5 font-medium text-gray-600 text-sm">
-                                Reg Reference
-                            </TableCell>
-                            <TableCell isHeader className="py-3 px-5 font-medium text-gray-600 text-sm">
-                                External Link
-                            </TableCell>
-                            <TableCell isHeader className="py-3 px-5 font-medium text-gray-600 text-sm">
-                                Designation
-                            </TableCell>
-                            <TableCell isHeader className="py-3 px-5 font-medium text-gray-600 text-sm">
-                                OE Part No
-                            </TableCell>
-                            <TableCell
-                                isHeader
-                                className="py-3 px-5 font-medium text-gray-600 text-sm text-right"
-                            >
-                                Actions
-                            </TableCell>
-                        </TableRow>
-                    </TableHeader>
-
-                    <TableBody>
-                        {paginated.map((item, index) => (
-                            <TableRow
-                                key={item.id}
-                                className={`transition-colors ${index % 2 === 0
-                                        ? "bg-white dark:bg-transparent"
-                                        : "bg-gray-50/50 dark:bg-white/[0.02]"
-                                    } hover:bg-gray-100/60 dark:hover:bg-white/[0.05]`}
-                            >
-                                <TableCell className="py-3 px-5 font-medium text-gray-800 dark:text-white/90">
-                                    {item.manufacturer}
-                                </TableCell>
-                                <TableCell className="py-3 px-5 text-gray-600 text-sm">
-                                    {item.protectionType}
-                                </TableCell>
-                                <TableCell className="py-3 px-5 text-gray-600 text-sm">
-                                    {item.regReference || "-"}
-                                </TableCell>
-                                <TableCell className="py-3 px-5 text-gray-600 text-sm">
-                                    {item.externalLink || "-"}
-                                </TableCell>
-                                <TableCell className="py-3 px-5 text-gray-600 text-sm">
-                                    {item.designation || "-"}
-                                </TableCell>
-                                <TableCell className="py-3 px-5 text-gray-600 text-sm">
-                                    {item.oePartNo || "-"}
-                                </TableCell>
-                                <TableCell className="py-3 px-5 text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="h-8 w-8 border-gray-200 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-white/[0.06]"
-                                        >
-                                            <Pencil size={16} className="text-gray-600" />
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="h-8 w-8 border-gray-200 hover:border-red-500 hover:bg-red-50 dark:hover:bg-white/[0.06]"
-                                        >
-                                            <Trash2 size={16} className="text-red-500" />
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
+             
+            
+                <BasicTableOne data={paginated} />
+           
 
             {/* Pagination */}
             <div className="flex justify-center items-center gap-2 mt-6">
                 <Button
                     variant="outline"
-                    size="icon"
+                    size="sm"
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     className="h-8 w-8 border-gray-200 disabled:opacity-50"
@@ -200,7 +115,7 @@ export default function ProtectionsPage() {
                     <Button
                         key={i}
                         onClick={() => setCurrentPage(i + 1)}
-                        variant={currentPage === i + 1 ? "default" : "outline"}
+                        variant={currentPage === i + 1 ? "primary" : "outline"}
                         className={`h-8 w-8 text-sm ${currentPage === i + 1
                                 ? "bg-blue-600 text-white hover:bg-blue-700"
                                 : "border-gray-200 text-gray-600 hover:border-blue-300 hover:bg-blue-50"
@@ -212,7 +127,7 @@ export default function ProtectionsPage() {
 
                 <Button
                     variant="outline"
-                    size="icon"
+                    size="sm"
                     disabled={currentPage === totalPages}
                     onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                     className="h-8 w-8 border-gray-200 disabled:opacity-50"

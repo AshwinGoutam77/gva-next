@@ -1,8 +1,7 @@
 import {
   Table,
   TableBody,
-  TableCell,
-  TableHeader,
+  TableCell, 
   TableRow,
 } from "../ui/table";
 
