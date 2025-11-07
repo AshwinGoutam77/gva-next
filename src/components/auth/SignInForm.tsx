@@ -116,7 +116,7 @@ export default function SignInForm() {
                 </Link>
               </div>
 
-              <Button className="w-full" disabled={loading}>
+              <Button className="w-full py-2" disabled={loading}>
                 {loading ? "Signing in..." : "Sign in"}
               </Button>
             </div>
