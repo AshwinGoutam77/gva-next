@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react"; 
 import {
     Search, 
@@ -10,6 +9,8 @@ import {
 import Input from "@/components/form/input/InputField";
 import Button from "@/components/ui/button/Button";
 import BasicTableOne from "@/components/tables/BasicTableOne";
+import { Modal } from "@/components/ui/modal";
+import CreateProtection from "@/components/CustomeForms/CreateProtection";
 
 interface Protection {
     id: number;
@@ -65,8 +66,9 @@ export default function ProtectionsPage() {
         (currentPage - 1) * perPage,
         currentPage * perPage
     );
-
+    const [isOpen,setIsOpen] = useState(false)
     return (
+        <>
         <div className="p-6">
             {/* Header */}
             <div className="flex gap-3 items-center flex-wrap justify-between mb-5">
@@ -86,7 +88,7 @@ export default function ProtectionsPage() {
                         />
                     </div>
 
-                    <Button className="bg-blue-600  hover:bg-blue-700 text-white gap-2 px-4">
+                    <Button className="inline-flex items-center justify-center gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300" onClick={()=>{setIsOpen(true)}}>
                         <Plus size={16} />
                         Create Protection
                     </Button>
@@ -102,8 +104,7 @@ export default function ProtectionsPage() {
             {/* Pagination */}
             <div className="flex justify-center items-center gap-2 mt-6">
                 <Button
-                    variant="outline"
-                    size="sm"
+                    variant="outline" 
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     className="h-8 w-8 border-gray-200 disabled:opacity-50"
@@ -126,8 +127,7 @@ export default function ProtectionsPage() {
                 ))}
 
                 <Button
-                    variant="outline"
-                    size="sm"
+                    variant="outline"  
                     disabled={currentPage === totalPages}
                     onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                     className="h-8 w-8 border-gray-200 disabled:opacity-50"
@@ -136,5 +136,9 @@ export default function ProtectionsPage() {
                 </Button>
             </div>
         </div>
+        <Modal  isOpen={isOpen} className="" onClose={()=>{setIsOpen(false)}}>
+            <CreateProtection onClose={()=>{setIsOpen(false)}}/>
+        </Modal>
+        </>
     );
 }

@@ -11,10 +11,11 @@ import {
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
+  Organizations,
   PieChartIcon,
-  PlugInIcon,
-  Protection,
-} from "../icons/index";
+  PlugInIcon, 
+  UserIcon,
+} from "../icons/index";   
 
 type NavItem = {
   name: string;
@@ -30,10 +31,20 @@ const navItems: NavItem[] = [
     path: "/",
   },
   {
-    icon: <Protection />,
-    name: "Protections",
-    path: "/protections",
+    icon: <Organizations />,
+    name: "Organization",
+    path: "/organization",
   },
+  {
+    icon: <UserIcon />,
+    name: "Users",
+    path: "/users",
+  },
+  // {
+  //   icon: <Protection />,
+  //   name: "Protections",
+  //   path: "/protections",
+  // },
 ];
 
 const othersItems: NavItem[] = [

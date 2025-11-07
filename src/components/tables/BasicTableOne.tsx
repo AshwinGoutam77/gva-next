@@ -112,15 +112,13 @@ export default function BasicTableOne({ data }: { data: Protection[] }) {
                   {/* ✅ Action Buttons Styled */}
                   <TableCell className="px-5 py-4 text-right">
                     <div className="flex justify-end gap-2">
-                      <Button
-                        size="sm"
+                      <Button 
                         variant="outline"
                         className="h-8 w-8 border-gray-200 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-white/[0.06]"
                       >
                         <Pencil size={14} className="text-gray-600" />
                       </Button>
-                      <Button 
-                        size="sm" 
+                      <Button  
                         variant="outline"
                         className="h-8 w-8 border-gray-200 hover:border-red-500 hover:bg-red-50 dark:hover:bg-white/[0.06]"
                       >
