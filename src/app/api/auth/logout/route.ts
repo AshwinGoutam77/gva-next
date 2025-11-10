@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { cookieName } from "@/lib/auth";
+export async function POST() {
+  const response = NextResponse.json({ message: "Logged out" });
 
-export async function GET() {
-  const res = NextResponse.json({ message: "Logged out" });
-  res.cookies.set("token", "", { maxAge: 0 });
-  return res;
+  response.cookies.set(cookieName, "", { path: "/", maxAge: 0 });
+
+  return response;
 }

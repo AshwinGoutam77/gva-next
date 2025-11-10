@@ -1,6 +1,5 @@
 import GridShape from "@/components/common/GridShape"; 
-import Image from "next/image";
-import Link from "next/link";
+import Image from "next/image"; 
 import React from "react";
 
 export default function AuthLayout({
@@ -18,10 +17,9 @@ export default function AuthLayout({
               {/* <!-- ===== Common Grid Shape Start ===== --> */}
               <GridShape />
               <div className="flex flex-col items-center  ">
-                <Link href="/" className="flex mb-4 gap-3 items-center">
+               
                 <Image src="images/logo/logo-icon.svg" alt="logo" width={40} height={40} />
-                  <p className="text-[36px] text-white">GVA e.V. DSDB</p>
-                </Link>
+                  <p className="text-[36px] text-white">GVA e.V. DSDB</p> 
                 <p className="text-center text-gray-400 dark:text-white/60 max-w-2xs">
                   Powerful Admin Dashboard designed for smooth management and insights.
                 </p>

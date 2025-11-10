@@ -5,8 +5,7 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { EyeCloseIcon, EyeIcon } from "@/icons";
-import Link from "next/link";
-import Cookies from "js-cookie";
+import Link from "next/link"; 
 import React, { useState } from "react";
 
 export default function SignInForm() {
@@ -16,40 +15,46 @@ export default function SignInForm() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleLogin = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    setErrorMsg("");
-    setLoading(true);
+ const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setErrorMsg("");
+  setLoading(true);
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const res = await fetch("/api/auth/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  credentials: "include", // ✅ important to store cookie!
+  body: JSON.stringify({ email, password }),
+});
 
-      const data = await res.json();
 
-      if (!res.ok) {
-        setErrorMsg(data.msg || "Login failed");
-        setLoading(false);
-        return;
-      }
+    const data = await res.json();
 
-      // ✅ Set cookies like your AI-agents project
-      Cookies.set("auth_token", data.token, { expires: 365, secure: true, sameSite: "strict" });
-      Cookies.set("user_email", data.user.email, { expires: 365, secure: true, sameSite: "strict" });
-
+    if (!res.ok) {
+      setErrorMsg(data.message || "Invalid credentials");
       setLoading(false);
-
-      // ✅ Instant redirect same as working project
-      window.location.href = "/";
-    } catch (err) {
-      console.error(err);
-      setErrorMsg("Server error");
-      setLoading(false);
+      return;
     }
-  };
+
+    // ✅ Redirect based on role
+  if (data.role === "SUPER_ADMIN") {
+    console.log("Login Submit Triggered");
+  window.location.href = "/admin";
+} else if (data.role === "ORG_ADMIN") {
+  window.location.href = "/org/dashboard";
+} else {
+  window.location.href = "/dashboard";
+}
+
+  } catch (err) {
+    console.error(err);
+    setErrorMsg("Server error");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
@@ -64,7 +69,7 @@ export default function SignInForm() {
             </p>
           </div>
 
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleLogin} action="javascript:void(0);">
             <div className="space-y-6">
 
               {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
@@ -116,7 +121,7 @@ export default function SignInForm() {
                 </Link>
               </div>
 
-              <Button className="w-full py-2" disabled={loading}>
+              <Button className="w-full py-2"  type="submit"  disabled={loading}>
                 {loading ? "Signing in..." : "Sign in"}
               </Button>
             </div>

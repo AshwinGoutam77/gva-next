@@ -1,63 +1,49 @@
-import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { connectDB } from "@/app/lib/db";
-import User from "@/app/models/User";
+import { cookieName,signJwt,comparePassword } from "@/lib/auth";
+import { connectDB } from '@/app/lib/db';
+import { NextResponse } from "next/server";
 
-// Define type for your JWT payload
-interface JWTPayload {
-  id: string;
-  email: string;
-}
-
-// Define type for User model (simplified)
-interface IUser {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-}
-
-export async function POST(req: NextRequest) {
+import User from '@/app/models/User'; 
+export async function POST(req: Request) {
   try {
-    await connectDB();
-
-    const { email, password }: { email?: string; password?: string } = await req.json();
+    const { email, password } = await req.json();
 
     if (!email || !password) {
-      return NextResponse.json({ msg: "Missing fields" }, { status: 400 });
+      return NextResponse.json({ message: "Email & Password required" }, { status: 400 });
     }
 
-    const user: IUser | null = await User.findOne({ email });
+    await connectDB();
+
+    const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ msg: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return NextResponse.json({ msg: "Invalid credentials" }, { status: 401 });
+    const match = await comparePassword(password, user.password);
+    if (!match) {
+      return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
     }
 
-    const secret = process.env.JWT_SECRET;
-    if (!secret) {
-      throw new Error("JWT_SECRET is not defined in environment variables");
-    }
+  const token = signJwt({
+  _id: user._id.toString(),
+  role: user.role,
+  organizationId: user.organizationId ? user.organizationId.toString() : null,
+});
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email } as JWTPayload,
-      secret,
-      { expiresIn: "7d" }
-    );
+    const response = NextResponse.json({
+      message: "Login successful",
+      role: user.role,
+    });
 
-    return NextResponse.json(
-      {
-        token,
-        user: { id: user._id, name: user.name, email: user.email },
-      },
-      { status: 200 }
-    );
-  } catch (err) {
-    console.error("Login error:", err);
-    return NextResponse.json({ msg: "Server error" }, { status: 500 });
+    response.cookies.set(cookieName, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

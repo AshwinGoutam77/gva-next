@@ -288,9 +288,8 @@ const AppSidebar: React.FC = () => {
 
         {/* Bottom Logout */}
         <div className="mb-6">
-           {isExpanded   || isMobileOpen ? <Link
-            href="/signin"
-            className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+           {isExpanded   || isMobileOpen ? <button 
+            className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group w-full text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
           >
             <svg
               className="fill-gray-500 group-hover:fill-gray-700 dark:group-hover:fill-gray-300"
@@ -305,7 +304,7 @@ const AppSidebar: React.FC = () => {
               />
             </svg>
             Sign out
-          </Link> :<Link
+          </button> :<Link
             href="/signin"
             className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
           >
